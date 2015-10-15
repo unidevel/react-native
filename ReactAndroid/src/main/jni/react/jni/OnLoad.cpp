@@ -643,6 +643,14 @@ static void loadScriptFromNetworkCached(JNIEnv* env, jobject obj, jstring source
   bridge->executeApplicationScript(script, jni::fromJString(env, sourceURL));
 }
 
+static void loadScriptFromFile(JNIEnv* env, jobject obj, jstring sourceName,
+                                   jstring fileName) {
+  auto bridge = jni::extractRefPtr<Bridge>(env, obj);
+  std::string script = "";
+  script = react::loadScriptFromFile(jni::fromJString(env, fileName));
+  bridge->executeApplicationScript(script, jni::fromJString(env, sourceName));
+}
+
 static void callFunction(JNIEnv* env, jobject obj, jint moduleId, jint methodId,
                          NativeArray::jhybridobject args) {
   auto bridge = extractRefPtr<Bridge>(env, obj);
@@ -790,6 +798,7 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
           "loadScriptFromAssets", "(Landroid/content/res/AssetManager;Ljava/lang/String;)V",
           bridge::loadScriptFromAssets),
         makeNativeMethod("loadScriptFromNetworkCached", bridge::loadScriptFromNetworkCached),
+        makeNativeMethod("loadScriptFromFile", bridge::loadScriptFromFile),
         makeNativeMethod("callFunction", bridge::callFunction),
         makeNativeMethod("invokeCallback", bridge::invokeCallback),
         makeNativeMethod("setGlobalVariable", bridge::setGlobalVariable),

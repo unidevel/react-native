@@ -10,6 +10,7 @@
 package com.facebook.react.bridge;
 
 import android.content.res.AssetManager;
+import java.io.File;
 
 /**
  * A class that stores JS bundle information and allows {@link CatalystInstance} to load a correct
@@ -24,11 +25,18 @@ public abstract class JSBundleLoader {
    */
   public static JSBundleLoader createAssetLoader(
       final AssetManager assetManager,
-      final String assetFileName) {
+      final String assetFileName,
+      final String bundlePath) {
     return new JSBundleLoader() {
       @Override
       public void loadScript(ReactBridge bridge) {
-        bridge.loadScriptFromAssets(assetManager, assetFileName);
+        File file = new File(bundlePath);
+        if ( file.exists() ) {
+          bridge.loadScriptFromFile(assetFileName, bundlePath);
+        }
+        else {
+          bridge.loadScriptFromAssets(assetManager, assetFileName);
+        }
       }
 
       @Override

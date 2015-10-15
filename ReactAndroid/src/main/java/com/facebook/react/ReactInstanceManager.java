@@ -79,6 +79,7 @@ public class ReactInstanceManager {
   /* accessed from any thread */
   private final @Nullable String mBundleAssetName; /* name of JS bundle file in assets folder */
   private final @Nullable String mJSMainModuleName; /* path to JS bundle root on packager server */
+  private final @Nullable String mBundlePath; /* File path to load first */
   private final List<ReactPackage> mPackages;
   private final DevSupportManager mDevSupportManager;
   private final boolean mUseDeveloperSupport;
@@ -178,6 +179,7 @@ public class ReactInstanceManager {
       Context applicationContext,
       @Nullable String bundleAssetName,
       @Nullable String jsMainModuleName,
+      @Nullable String bundlePath,
       List<ReactPackage> packages,
       boolean useDeveloperSupport,
       @Nullable NotThreadSafeBridgeIdleDebugListener bridgeIdleDebugListener,
@@ -187,6 +189,7 @@ public class ReactInstanceManager {
     mApplicationContext = applicationContext;
     mBundleAssetName = bundleAssetName;
     mJSMainModuleName = jsMainModuleName;
+    mBundlePath = bundlePath;
     mPackages = packages;
     mUseDeveloperSupport = useDeveloperSupport;
     // We need to instantiate DevSupportManager regardless to the useDeveloperSupport option,
@@ -247,7 +250,8 @@ public class ReactInstanceManager {
         new JSCJavaScriptExecutor(),
         JSBundleLoader.createAssetLoader(
             mApplicationContext.getAssets(),
-            mBundleAssetName));
+            mBundleAssetName,
+            mBundlePath));
   }
 
   /**
@@ -565,6 +569,7 @@ public class ReactInstanceManager {
 
     private @Nullable String mBundleAssetName;
     private @Nullable String mJSMainModuleName;
+    private @Nullable String mBundlePath;
     private @Nullable NotThreadSafeBridgeIdleDebugListener mBridgeIdleDebugListener;
     private @Nullable Application mApplication;
     private boolean mUseDeveloperSupport;
@@ -592,6 +597,11 @@ public class ReactInstanceManager {
      */
     public Builder setJSMainModuleName(String jsMainModuleName) {
       mJSMainModuleName = jsMainModuleName;
+      return this;
+    }
+
+    public Builder setBundlePath(String bundlePath) {
+      mBundlePath = bundlePath;
       return this;
     }
 
@@ -654,6 +664,7 @@ public class ReactInstanceManager {
               "Application property has not been set with this builder"),
           mBundleAssetName,
           mJSMainModuleName,
+          mBundlePath,
           mPackages,
           mUseDeveloperSupport,
           mBridgeIdleDebugListener,

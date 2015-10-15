@@ -66,6 +66,7 @@ public class ReactBridge extends Countable {
    */
   public native void loadScriptFromAssets(AssetManager assetManager, String assetName);
   public native void loadScriptFromNetworkCached(String sourceURL, @Nullable String tempFileName);
+  public native void loadScriptFromFile(String sourceName, String fileName);
   public native void callFunction(int moduleId, int methodId, NativeArray arguments);
   public native void invokeCallback(int callbackID, NativeArray arguments);
   public native void setGlobalVariable(String propertyName, String jsonEncodedArgument);
